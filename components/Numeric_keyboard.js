@@ -1,7 +1,5 @@
 import Button from './Button'
 import Image from 'next/image'
-import { useState } from 'react';
-
 
 const create_buttons = (value, handleClick) => {
     const handleButtonClick = (event) => handleClick(event);
@@ -23,11 +21,10 @@ const create_rows = (values) => {
 export default function Numeric_keyboard (props) {
     const check = <Image className="pointer-events-none" width={24} height={24} src={`/check.svg`} alt="check_icon"/>
     const exit = <Image className="pointer-events-none" width={24} height={24} src={`/exit.svg`} alt="exit_icon"/>
-    const [userInput, setUserInput] = useState("");
 
     const handleUserInput = (event) => {
         event.preventDefault();
-        setUserInput(userInput.concat(event.target.value))
+        props.setUserInput(props.userInput.concat(event.target.value))
     }
 
     const handleCheck = () => {
@@ -35,7 +32,7 @@ export default function Numeric_keyboard (props) {
     }
 
     const handleCancel = () => {
-        setUserInput("");
+        props.setUserInput("");
     }
 
     const firstRow_buttons = [

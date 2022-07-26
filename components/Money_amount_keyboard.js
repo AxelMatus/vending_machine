@@ -1,5 +1,4 @@
 import Button from './Button'
-import { useState } from 'react';
 
 const create_buttons = (value, handleClick) => {
     const handleButtonClick = (event) => handleClick(event);
@@ -19,11 +18,10 @@ const create_rows = (values) => {
 );}
 
 export default function Money_amount_keyboard (props) {
-    const [userCash, setUserCash] = useState(0);
 
     const handleUserInput = (event) => {
         event.preventDefault();
-        setUserCash(userCash + parseInt(event.target.value));
+        props.setUserCash(props.userCash + parseInt(event.target.value));
     }
 
     const firstRow_buttons = [
@@ -39,8 +37,7 @@ export default function Money_amount_keyboard (props) {
         { id: 4, value: "50", tag: "₡50", width: "w-20", height:"h-12", handleClick: handleUserInput},
         { id: 5, value: "25", tag: "₡25", width: "w-20", height:"h-12", handleClick: handleUserInput},
     ]
-    
-    console.log(userCash);
+
     return(
         <div className={`w-${props.width} h-${props.height} ${props.padding}`}>
                 {create_rows(firstRow_buttons)}
