@@ -14,7 +14,7 @@ export default function Controller() {
   return (
     <div  className="flex">
       <div className="bg-main-gray h-screen w-2/3">
-        <div className="bg-secundary-gray border-black  border-[24px] rounded-md m-10 h-5/6">
+        <div className="bg-secundary-gray border-black  border-[24px] rounded-md m-4 h-[95vh]">
           <div className="bg-main-green rounded-md h-12 text-2xl font-bebasNeue text-white p-2" >
             MATUS VENDING MACHINE
           </div>
