@@ -9,6 +9,7 @@ import UserBill from '../components/User_bill'
 import UserChange from '../components/User_change'
 
 import { products } from '../data/products';
+import {get_total_sum_of_products, get_total_amount} from '../logic/machine_calculations'
 
 export default function Vending_Machine() {
 
@@ -16,18 +17,21 @@ export default function Vending_Machine() {
   const [userInput, setUserInput] = useState("");
   const [userCash, setUserCash] = useState(0);
   const [userCheck, setUserCheck] = useState(false);
+  const [userCancel, setUserCancel] = useState(false);
   const [machineMessage, setMachineMessage] = useState("Por favor, ingrese el código del producto que desea.");
   const [userProductList, setUserProductList] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   const [productPicked, setProductPicked] = useState({ id: 0, name: '', price: 0 });
   const [productToBePicked, setProductToBePicked] = useState(true);
   const [quantityToBePicked, setQuantityToBePicked] = useState(false);
+  const [readyToPay, setReadyToPay] = useState(false);
+  const [moneyInserted, setMoneyInserted] = useState(0);
 
   if(productToBePicked && userCheck) {
     if( products.find(element => element.code === userInput) ){
-      console.log('entra aqui');
       setProductPicked(products.find(element => element.code === userInput));
-      setMachineMessage("Excelente! Ahora por favor, ingrese la cantidad deseada.");
+      setMachineMessage("¡Excelente! Ahora por favor, ingrese la cantidad deseada.");
       setUserInput("");
       setProductToBePicked(false);
       setQuantityToBePicked(true);
@@ -36,36 +40,57 @@ export default function Vending_Machine() {
   }
 
   if(quantityToBePicked && userCheck) {
-    let new_products = [];
-    let new_product = { id: productPicked.id, name: productPicked.name, price: productPicked.price };
-    for(let index = 0; index < parseInt(userInput); index++){
-      new_products.push(new_product);
+    let new_product = { id: productPicked.id, name: productPicked.name, quantity: 1, price: productPicked.price };
+    for(let index = 1; index < parseInt(userInput); index++){
+      new_product.quantity += 1;
     }
-    setUserProductList(new_products);
+    const product_index = products.findIndex(element => element.id === new_product.id);
+    products[product_index].quantity -= new_product.quantity;
+
+    setUserProductList([...userProductList, new_product]);
     setUserInput("");
     setQuantityToBePicked(false);
+    setUserCheck(false);
+    setMachineMessage("Artículo agregado ¿Desea algún otro producto?");
   }
 
+  if(!productToBePicked && !quantityToBePicked && userCheck ) {
+    setMachineMessage("Por favor, ingrese el código del producto que desea.");
+    setProductToBePicked(true);
+    setQuantityToBePicked(false);
+    setUserCheck(false);
+  }
 
-  // if(product_picked && quantity_picked ) {
-  //   console.log('entra2', product_picked, quantity_picked);
-  //   setMachineMessage("¿Desea algun otro producto?");
-  //   if(userInput === "check"){
-  //     product_picked = false;
-  //     quantity_picked = false;
-  //     product = [];
-  //   } else {
-  //     // Manda a hacer calculos
-  //   }
-  // }
+  if(!productToBePicked && !quantityToBePicked && userCancel ) {
+    setMachineMessage("Por favor, ingrese el dinero y pulse el check para continuar.");
+    setUserCancel(false);
+    setReadyToPay(true);
+  }
+
+  if(readyToPay && userCheck){
+    const userList = (get_total_sum_of_products(userProductList));
+    const total_amount = get_total_amount(userList);
+    setMoneyInserted(userCash);
+    setTotalAmount(total_amount);
+    if(userCash < total_amount){
+      setMachineMessage("Debe ingresar la cantidad requerida o más.");
+    } else {
+      setMachineMessage("Muchas gracias por su compra! Disfrute su producto.");
+    }
+    setUserCheck(false);
+  }
 
   const handleUserCheck = () => {
     setUserCheck(true);
+    setUserCancel(false);
   }
 
   const handleUserCancel = () => {
+    setUserCancel(true);
     setUserCheck(false);
   }
+
+
   return (
     <div  className="flex">
       <div className="bg-main-gray h-screen w-2/3">
@@ -77,11 +102,11 @@ export default function Vending_Machine() {
           <li className='text-white font-roboto px-8 pb-4 list-disc text-base'> {machineMessage} </li>
           <div className='flex px-12'>
             <Image width={24} height={24} src={`/polygon_1.svg`} alt="triangle_icon"/>
-            <p className='px-4 text-white'> {userInput} </p>
+            <p className='px-4 text-white'> {readyToPay ? userCash : userInput} </p>
           </div>
           <div className='flex'>    
             <UserBill user_products={userProductList}/>
-            <UserChange user_balance={3000} total_amount={2775}/>
+            <UserChange user_balance={moneyInserted} total_amount={totalAmount}/>
           </div>
         </div>
       </div>
