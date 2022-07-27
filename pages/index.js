@@ -36,18 +36,14 @@ export default function Vending_Machine() {
   }
 
   if(quantityToBePicked && userCheck) {
-    console.log('entra');
-    const new_product = { id: productPicked.id, name: productPicked.name, price: productPicked.price };
-    for(let index = 0; index < userInput; index++){
-      const new_list = userProductList;
-      new_list.push(new_product);
-      setUserProductList(new_list);
+    let new_products = [];
+    let new_product = { id: productPicked.id, name: productPicked.name, price: productPicked.price };
+    for(let index = 0; index < parseInt(userInput); index++){
+      new_products.push(new_product);
     }
+    setUserProductList(new_products);
     setUserInput("");
     setQuantityToBePicked(false);
-    console.log('quantity ', new_product);
-  } else {
-    console.log(quantityToBePicked, userInput);
   }
 
 
