@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { calculate_change_detailed, calculate_change } from '../logic/machine_calculations'
 
 export default function User_change (props) {
 
-    const [userChangeList, setuserChangeList] = useState(calculate_change_detailed(props.user_balance, props.total_amount));
-    const [userChange, setUserChange] = useState(calculate_change(props.user_balance, props.total_amount));
+    const [userChangeList, setUserChangeList] = useState(calculate_change_detailed( props.total_amount, props.user_balance,));
+    const [userChange, setUserChange] = useState(calculate_change(props.total_amount, props.user_balance,));
+
+    useEffect (()=>{
+        if(props.user_balance >= props.total_amount){
+            setUserChangeList(calculate_change_detailed(props.user_balance, props.total_amount));
+            setUserChange(calculate_change(props.user_balance, props.total_amount));
+        }
+    },[props.user_balance, props.total_amount]);
 
     return(
         <div className="mt-16 pl-12 w-1/2 text-white">
