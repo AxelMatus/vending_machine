@@ -34,6 +34,7 @@ export function get_total_amount (product_list) {
 export function calculate_change_detailed (user_balance, amount_to_pay) {
     let change = [];
     let coins_sum = 0;
+    const change_amount = calculate_change(user_balance, amount_to_pay);
     if(user_balance===amount_to_pay){
         return change;
     }
@@ -45,13 +46,13 @@ export function calculate_change_detailed (user_balance, amount_to_pay) {
             quantity: 0
         }
         
-        let can_add_another_coin = coins_sum + coin.value <= amount_to_pay;
-        while(can_add_another_coin && coins_sum < amount_to_pay && coin.quantity > 0){
+        let can_add_another_coin = coins_sum + coin.value <= change_amount;
+        while(can_add_another_coin && coins_sum < change_amount && coin.quantity > 0){
 
             coins_sum += coin.value;
             coin.quantity -= 1;
             change_coin.quantity += 1;
-            if(coins_sum + coin.value > amount_to_pay){
+            if(coins_sum + coin.value > change_amount){
                 can_add_another_coin = false; 
             }
         }

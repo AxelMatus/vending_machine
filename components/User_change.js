@@ -11,13 +11,13 @@ export default function User_change (props) {
             <p> {`Su vuelto es de ${userChange} colones.`} </p>
             <p> Desglose: </p>
             { userChangeList.map((coin) => {
+                if(coin.quantity !== 0){
                 return (
-                (coin.quantity === 0) ? <></> :
-                <div key={coin.id} className="flex">
-                    <p> {`${coin.quantity} moneda de ${coin.value}`}</p>
-                </div>
-                )
-            })}
+                    <div key={coin.id} className="flex">
+                        <p> {`${coin.quantity} moneda de ${coin.value}`}</p>
+                    </div>
+                )}}
+            )}
         </div>
     );
 }

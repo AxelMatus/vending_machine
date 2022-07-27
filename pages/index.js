@@ -11,14 +11,24 @@ import UserChange from '../components/User_change'
 import { products } from '../data/products';
 
 export default function Vending_Machine() {
+
   const machineScreenHeader = "MATUS VENDING MACHINE";
   const [userInput, setUserInput] = useState("");
   const [userCash, setUserCash] = useState(0);
-  const [machineMessage, setMachineMessage] = useState("Algo aqui");
+  const [machineMessage, setMachineMessage] = useState("Por favor, ingrese el código del producto que desea.");
+  const [isCodeValid, setIsCodeValid] = useState(false);
 
-  // if(userInput === "0123"){
-  //   console.log("funciona");
-  // }
+  const [userProductList, setUserProductList] = useState([]);
+
+  if(products.find(element => element.code === userInput)){
+    setIsCodeValid(true);
+    setUserInput("");
+    setMachineMessage("Excelente! Ahora por favor, ingrese la cantidad deseada.")
+  }
+
+  if(isCodeValid) {
+    //const 
+  }
 
   return (
     <div  className="flex">
@@ -35,7 +45,7 @@ export default function Vending_Machine() {
           </div>
           <div className='flex'>    
             <UserBill user_products={products}/>
-            <UserChange user_balance={500} total_amount={500}/>
+            <UserChange user_balance={3000} total_amount={2775}/>
           </div>
         </div>
       </div>
