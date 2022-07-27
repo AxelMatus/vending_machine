@@ -28,11 +28,12 @@ export default function Numeric_keyboard (props) {
     }
 
     const handleCheck = () => {
-        console.log("check")
+        props.handleCheck();
     }
 
     const handleCancel = () => {
         props.setUserInput("");
+        props.handleCancel();
     }
 
     const firstRow_buttons = [

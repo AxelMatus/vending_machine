@@ -15,21 +15,61 @@ export default function Vending_Machine() {
   const machineScreenHeader = "MATUS VENDING MACHINE";
   const [userInput, setUserInput] = useState("");
   const [userCash, setUserCash] = useState(0);
+  const [userCheck, setUserCheck] = useState(false);
   const [machineMessage, setMachineMessage] = useState("Por favor, ingrese el código del producto que desea.");
-  const [isCodeValid, setIsCodeValid] = useState(false);
-
   const [userProductList, setUserProductList] = useState([]);
 
-  if(products.find(element => element.code === userInput)){
-    setIsCodeValid(true);
+  const [productPicked, setProductPicked] = useState({ id: 0, name: '', price: 0 });
+  const [productToBePicked, setProductToBePicked] = useState(true);
+  const [quantityToBePicked, setQuantityToBePicked] = useState(false);
+
+  if(productToBePicked && userCheck) {
+    if( products.find(element => element.code === userInput) ){
+      console.log('entra aqui');
+      setProductPicked(products.find(element => element.code === userInput));
+      setMachineMessage("Excelente! Ahora por favor, ingrese la cantidad deseada.");
+      setUserInput("");
+      setProductToBePicked(false);
+      setQuantityToBePicked(true);
+      setUserCheck(false);
+    }
+  }
+
+  if(quantityToBePicked && userCheck) {
+    console.log('entra');
+    const new_product = { id: productPicked.id, name: productPicked.name, price: productPicked.price };
+    for(let index = 0; index < userInput; index++){
+      const new_list = userProductList;
+      new_list.push(new_product);
+      setUserProductList(new_list);
+    }
     setUserInput("");
-    setMachineMessage("Excelente! Ahora por favor, ingrese la cantidad deseada.")
+    setQuantityToBePicked(false);
+    console.log('quantity ', new_product);
+  } else {
+    console.log(quantityToBePicked, userInput);
   }
 
-  if(isCodeValid) {
-    //const 
+
+  // if(product_picked && quantity_picked ) {
+  //   console.log('entra2', product_picked, quantity_picked);
+  //   setMachineMessage("¿Desea algun otro producto?");
+  //   if(userInput === "check"){
+  //     product_picked = false;
+  //     quantity_picked = false;
+  //     product = [];
+  //   } else {
+  //     // Manda a hacer calculos
+  //   }
+  // }
+
+  const handleUserCheck = () => {
+    setUserCheck(true);
   }
 
+  const handleUserCancel = () => {
+    setUserCheck(false);
+  }
   return (
     <div  className="flex">
       <div className="bg-main-gray h-screen w-2/3">
@@ -44,13 +84,13 @@ export default function Vending_Machine() {
             <p className='px-4 text-white'> {userInput} </p>
           </div>
           <div className='flex'>    
-            <UserBill user_products={products}/>
+            <UserBill user_products={userProductList}/>
             <UserChange user_balance={3000} total_amount={2775}/>
           </div>
         </div>
       </div>
       <div className="bg-main-gray h-screen w-1/3">
-        <NumericKeyBoard width={"w-40"} height={"h-40"} padding={"pt-20"} userInput={userInput} setUserInput={setUserInput}/>
+        <NumericKeyBoard width={"w-40"} height={"h-40"} padding={"pt-20"} userInput={userInput} setUserInput={setUserInput} handleCheck={handleUserCheck} handleCancel={handleUserCancel}/>
         <AmountKeyBoard width={"w-40"} height={"h-40"} padding={"p-8"} userCash={userCash} setUserCash={setUserCash}/>
       </div>
     </div>

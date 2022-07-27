@@ -23,4 +23,3 @@ export default function User_bill (props) {
         </div>
     );
 }
-// id, name, quantity, price
