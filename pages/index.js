@@ -6,10 +6,12 @@ import NumericKeyBoard from '../components/Numeric_keyboard'
 import AmountKeyBoard from '../components/Money_amount_keyboard'
 import ProductRow from '../components/Product_row'
 import UserBill from '../components/User_bill'
+import UserChange from '../components/User_change'
+
 import { products } from '../data/products';
 
 export default function Vending_Machine() {
-  const [machineScreenHeader, setMachineScreenHeader] = useState("MATUS VENDING MACHINE");
+  const machineScreenHeader = "MATUS VENDING MACHINE";
   const [userInput, setUserInput] = useState("");
   const [userCash, setUserCash] = useState(0);
   const [machineMessage, setMachineMessage] = useState("Algo aqui");
@@ -31,7 +33,10 @@ export default function Vending_Machine() {
             <Image width={24} height={24} src={`/polygon_1.svg`} alt="triangle_icon"/>
             <p className='px-4 text-white'> {userInput} </p>
           </div>
-          <UserBill user_products={products}/>
+          <div className='flex'>    
+            <UserBill user_products={products}/>
+            <UserChange user_balance={500} total_amount={500}/>
+          </div>
         </div>
       </div>
       <div className="bg-main-gray h-screen w-1/3">
